@@ -40,3 +40,14 @@ export async function signIn(req, res) {
 
 }
 
+export async function logout(req, res){
+    const { token } = res.locals.session;
+
+    try{
+        await db.collection('sessions').deleteOne({ token });
+        res.sendStatus(200);
+    }catch(err){
+        res.status(500).send(err.message);
+    }
+}
+
