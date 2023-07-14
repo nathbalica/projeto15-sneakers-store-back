@@ -17,3 +17,6 @@ export async function authValidation(req, res, next) {
         res.status(500).send(err.message);
     }
 }
+
+
+
