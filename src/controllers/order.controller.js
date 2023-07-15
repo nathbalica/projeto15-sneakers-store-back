@@ -41,7 +41,7 @@ export async function cancelOrder ( req, res ) {
 
     try{
 
-        await db.collection("order").deleteOne({ userId });
+        await db.collection("order").deleteOne({ userId }); //VERIFICAR SE É USERID MESMO O NOME DA PROPRIEDADE USADA
 
     } catch (err) {
         return res.status(500).send(err.message);
