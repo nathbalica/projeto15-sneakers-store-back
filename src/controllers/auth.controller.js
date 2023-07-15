@@ -40,13 +40,27 @@ export async function signIn(req, res) {
 
 }
 
-export async function logout(req, res){
+export async function logout(req, res) {
     const { token } = res.locals.session;
 
-    try{
+    try {
         await db.collection('sessions').deleteOne({ token });
         res.sendStatus(200);
-    }catch(err){
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+}
+
+export async function getSession(req, res) {
+    const { token } = req.params;
+    console.log(token);
+
+    try {
+        const session = await db.collection("sessions").findOne({ token });
+        if (!session) return res.status(404).send("Usuário não encontrado!");
+        
+        res.send(session);
+    } catch (err) {
         res.status(500).send(err.message);
     }
 }
