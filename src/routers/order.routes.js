@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { cancelOrder, closeOrder, getOrder } from "../controllers/order.controller";
-import { authValidation } from "../middlewares/authValidation.middleware";
+import { cancelOrder, closeOrder, getOrder } from "../controllers/order.controller.js";
+import { authValidation } from "../middlewares/authValidation.middleware.js";
 
 
 const orderRouter = Router()
