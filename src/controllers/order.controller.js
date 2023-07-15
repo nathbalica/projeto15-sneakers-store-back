@@ -31,6 +31,8 @@ export async function closeOrder ( req, res ) {
         await db.collection("order").deleteOne({ userId }); //VERIFICAR SE É USERID MESMO O NOME DA PROPRIEDADE USADA
         await db.collection("cart").deleteMany({ userId });
 
+        res.sendStatus(200);
+
     } catch (err) {
         return res.status(500).send(err.message);
     }
@@ -42,6 +44,8 @@ export async function cancelOrder ( req, res ) {
     try{
 
         await db.collection("order").deleteOne({ userId }); //VERIFICAR SE É USERID MESMO O NOME DA PROPRIEDADE USADA
+
+        res.sendStatus(200);
 
     } catch (err) {
         return res.status(500).send(err.message);
