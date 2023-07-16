@@ -68,8 +68,55 @@ export async function getProducts(req, res) {
         totalPages,
       });
     } catch (err) {
+        
       console.log(err);
       return res.status(500).send(err.message);
     }
   }
+
+  export async function getProductSuggestions(req, res) {
+    const { search = "" } = req.query;
+  
+    try {
+      const query = {
+        name: { $regex: search, $options: "i" },
+      };
+  
+      const suggestions = await db
+        .collection("products")
+        .find(query)
+        .limit(5) // Limite de 5 sugestões
+        .toArray();
+  
+      // Extrai apenas os nomes dos produtos como sugestões
+      const suggestionNames = suggestions.map((product) => product.name);
+  
+      res.send({
+        suggestions: suggestionNames,
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).send(err.message);
+    }
+}
+
+export async function searchProducts(req, res) {
+    const { searchValue } = req.query;
+  
+    try {
+      const query = {
+        name: { $regex: searchValue, $options: "i" },
+      };
+  
+      const searchResults = await db.collection("products").find(query).toArray();
+  
+      res.send({
+        results: searchResults,
+      });
+    } catch (err) {
+      console.error("Error searching products:", err);
+      return res.status(500).send(err.message);
+    }
+  }
+  
   
