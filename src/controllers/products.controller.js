@@ -38,15 +38,36 @@ export async function getProduct(req, res) {
     }
 }
 
+// export async function getProducts(req, res) {
+
+//     try {
+
+//         const products = await db.collection("products").find().toArray();
+
+//         res.send(products);
+//     } catch (err) {
+//         console.log(err);
+//         return res.status(500).send(err.message);
+//     }
+// }
+
 export async function getProducts(req, res) {
-
+    const { page = 1, perPage = 5 } = req.query;
+  
     try {
-
-        const products = await db.collection("products").find().toArray();
-
-        res.send(products);
+      const totalCount = await db.collection("products").countDocuments();
+      const totalPages = Math.ceil(totalCount / perPage);
+  
+      const skip = (page - 1) * perPage;
+      const products = await db.collection("products").find().skip(skip).limit(perPage).toArray();
+  
+      res.send({
+        products,
+        currentPage: parseInt(page),
+        totalPages
+      });
     } catch (err) {
-        console.log(err);
-        return res.status(500).send(err.message);
+      console.log(err);
+      return res.status(500).send(err.message);
     }
 }
