@@ -53,21 +53,23 @@ export async function getProduct(req, res) {
 
 export async function getProducts(req, res) {
     const { page = 1, perPage = 5 } = req.query;
-  
+    const parsedPage = parseInt(page);
+    const parsedPerPage = parseInt(perPage);
+
     try {
-      const totalCount = await db.collection("products").countDocuments();
-      const totalPages = Math.ceil(totalCount / perPage);
-  
-      const skip = (page - 1) * perPage;
-      const products = await db.collection("products").find().skip(skip).limit(perPage).toArray();
-  
-      res.send({
-        products,
-        currentPage: parseInt(page),
-        totalPages
-      });
+        const totalCount = await db.collection("products").countDocuments();
+        const totalPages = Math.ceil(totalCount / parsedPerPage);
+
+        const skip = (parsedPage - 1) * parsedPerPage;
+        const products = await db.collection("products").find().skip(skip).limit(parsedPerPage).toArray();
+
+        res.send({
+            products,
+            currentPage: parsedPage,
+            totalPages
+        });
     } catch (err) {
-      console.log(err);
-      return res.status(500).send(err.message);
+        console.log(err);
+        return res.status(500).send(err.message);
     }
 }
