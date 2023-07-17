@@ -6,8 +6,8 @@ export async function getOrder ( req, res ) {
 
     try{
 
-        const userCart = await db.collection("order").findOne({ userId }); //VERIFICAR SE É USERID MESMO O NOME DA PROPRIEDADE USADA
-        const items = userCart.itemsId.map(async id => {
+        const userCart = await db.collection("cart").findOne({ userId }); //VERIFICAR SE É USERID MESMO O NOME DA PROPRIEDADE USADA
+        const items = userCart.itens.map(async id => {
             try{
                 const item = await db.collection("products").findOne({ _id: new ObjectId(id) });
                 return item;
