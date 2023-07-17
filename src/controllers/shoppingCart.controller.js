@@ -27,10 +27,10 @@ export async function getCart(req, res) {
 
     try {
         const cart = await db.collection("cart").findOne({ userId: id });
-        if (!cart) res.status(404).send("Carrinho ainda não criado!");
+        if (!cart) return res.status(404).send("Carrinho ainda não criado!");
         res.send(cart);
 
-    } catch (error) {
+    } catch (err) {
         res.status(500).send(err.message);
     }
 }
@@ -54,19 +54,6 @@ export async function removeOneFromCart(req, res) {
         if (update.matchedCount === 0) return res.status(404).send("O produto não existe!");
 
         res.status(204).send("Item removido com sucesso");
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
-}
-
-export async function removeAllById(req, res) {
-    const { id, itemId } = req.params;
-
-    try {
-        const update = await db.collection("cart").updateOne({ userId: id }, { $pull: { itens: itemId } });
-        if (update.matchedCount === 0) return res.status(404).send("Carrinho não encontrado!");
-
-        res.status(204).send("Itens removidos com sucesso");
     } catch (err) {
         res.status(500).send(err.message);
     }
