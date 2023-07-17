@@ -105,7 +105,7 @@ export async function searchProducts(req, res) {
   
     try {
       const query = {
-        name: { $regex: searchValue, $options: "i" },
+        name: { $regex: toString(searchValue), $options: "i" },
       };
   
       const searchResults = await db.collection("products").find(query).toArray();
