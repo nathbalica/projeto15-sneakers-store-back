@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb";
 
 export async function getOrder(req, res) {
     const { userId } = res.locals.session;
+
     const user = userId.toString();
   
     try {
@@ -21,6 +22,7 @@ export async function getOrder(req, res) {
       console.log('items:           ', items);
   
       return res.status(200).send(items);
+
     } catch (err) {
       return res.status(500).send(err.message);
     }
