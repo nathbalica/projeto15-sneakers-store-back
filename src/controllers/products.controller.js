@@ -101,11 +101,12 @@ export async function getProducts(req, res) {
 }
 
 export async function searchProducts(req, res) {
-    const { searchValue } = req.query;
+    const { searchValue = ""} = req.query;
   
     try {
       const query = {
-        name: { $regex: toString(searchValue), $options: "i" },
+        name: { $regex: toString(searchValue),
+             $options: "i" },
       };
   
       const searchResults = await db.collection("products").find(query).toArray();
