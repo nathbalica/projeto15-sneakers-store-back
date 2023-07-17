@@ -1,27 +1,31 @@
 import { db } from "../database/db.js";
 import { ObjectId } from "mongodb";
 
-export async function getOrder ( req, res ) {
+export async function getOrder(req, res) {
     const { userId } = res.locals.session;
-
-    try{
-
-        const userCart = await db.collection("order").findOne({ userId }); //VERIFICAR SE É USERID MESMO O NOME DA PROPRIEDADE USADA
-        const items = userCart.itemsId.map(async id => {
-            try{
-                const item = await db.collection("products").findOne({ _id: new ObjectId(id) });
-                return item;
-            } catch (err) {
-                return res.status(500).send(err.message);
-            }
-        })
-
-        return res.status(200).send(items);
-
+    const user = userId.toString();
+  
+    try {
+      const userCart = await db.collection("cart").findOne({ userId: user });
+      const itemIds = userCart.itens; // Nota: corrigi o nome da propriedade de "itens" para "itemIds" para manter a consistência
+      const itemPromises = itemIds.map(async (id) => {
+        try {
+          const item = await db.collection("products").findOne({ _id: new ObjectId(id) });
+          return item;
+        } catch (err) {
+          throw err;
+        }
+      });
+  
+      const items = await Promise.all(itemPromises);
+      console.log('items:           ', items);
+  
+      return res.status(200).send(items);
     } catch (err) {
-        return res.status(500).send(err.message);
+      return res.status(500).send(err.message);
     }
-}
+  }
+  
 
 export async function closeOrder ( req, res ) {
     const { userId } = res.locals.session
