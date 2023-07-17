@@ -31,11 +31,12 @@ export async function getOrder(req, res) {
 
 export async function closeOrder ( req, res ) {
     const { userId } = res.locals.session
+    const user = userId.toString();
 
     try{
 
-        await db.collection("order").deleteOne({ userId }); //VERIFICAR SE É USERID MESMO O NOME DA PROPRIEDADE USADA
-        await db.collection("cart").deleteMany({ userId });
+        await db.collection("order").deleteOne({ userId:user }); //VERIFICAR SE É USERID MESMO O NOME DA PROPRIEDADE USADA
+        await db.collection("cart").deleteMany({ userId:user });
 
         res.sendStatus(200);
 
@@ -46,10 +47,11 @@ export async function closeOrder ( req, res ) {
 
 export async function cancelOrder ( req, res ) {
     const { userId } = res.locals.session;
+    const user = userId.toString();
 
     try{
 
-        await db.collection("order").deleteOne({ userId }); //VERIFICAR SE É USERID MESMO O NOME DA PROPRIEDADE USADA
+        await db.collection("order").deleteOne({ userId:user }); //VERIFICAR SE É USERID MESMO O NOME DA PROPRIEDADE USADA
 
         res.sendStatus(200);
 
